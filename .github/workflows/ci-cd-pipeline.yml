@@ -110,21 +110,20 @@ jobs:
         run: terraform apply -auto-approve
         working-directory: terraform/
 
+
       - name: Get Terraform Outputs
         id: tf_outputs
-        env:
-          TF_LOG: ERROR 
         run: |
-          echo "AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group)" >> $GITHUB_ENV
-          echo "AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name)" >> $GITHUB_ENV
-
+          echo "AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group)" >> $GITHUB_OUTPUT
+          echo "AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name)" >> $GITHUB_OUTPUT
 
       - name: Set AKS Credentials
         run: |
           az aks get-credentials \
-            --resource-group $AKS_RG \
-            --name $AKS_CLUSTER \
-            --admin \ 
+            --resource-group ${{ steps.tf_outputs.outputs.AKS_RG }} \
+            --name ${{ steps.tf_outputs.outputs.AKS_CLUSTER }} \
+            --admin \
+
 
       - name: Install kubectl
         run: |
