@@ -19,7 +19,11 @@ spec:
         ports:
           - containerPort: 3000
         env:
-         REACT_APP_SERVER_URL=${{ REACT_APP_SERVER_URL }}
+         - name: SECRET
+           valueFrom:
+            secretKeyRef:
+              name: frontend-secrets
+              key: REACT_APP_SERVER_URL
 ---
 apiVersion: v1
 kind: Service

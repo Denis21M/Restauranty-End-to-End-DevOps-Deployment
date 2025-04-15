@@ -19,11 +19,31 @@ spec:
         ports:
           - containerPort: 3001
         env:
-         SECRET: ${{ secrets.SECRET }}
-         MONGODB_URI: ${{ secrets.MONGODB_URI }}
-         CLOUD_NAME: ${{ secrets.CLOUD_NAME }}
-         CLOUD_API_KEY: ${{ secrets.CLOUD_API_KEY }}
-         CLOUD_API_SECRET: ${{ secrets.CLOUD_API_SECRET }}
+          - name: SECRET
+            valueFrom:
+              secretKeyRef:
+                name: auth-secrets
+                key: SECRET
+          - name: MONGODB_URI
+            valueFrom:
+              secretKeyRef:
+                name: auth-secrets
+                key: MONGODB_URI
+          - name: CLOUD_NAME
+            valueFrom:
+              secretKeyRef:
+                name: auth-secrets
+                key: CLOUD_NAME
+          - name: CLOUD_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: auth-secrets
+                key: CLOUD_API_KEY
+          - name: CLOUD_API_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: auth-secrets
+                key: CLOUD_API_SECRET
 ---
 apiVersion: v1
 kind: Service
