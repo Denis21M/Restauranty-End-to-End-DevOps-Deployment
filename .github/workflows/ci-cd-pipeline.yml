@@ -97,35 +97,40 @@ jobs:
           # Change to terraform directory
           cd terraform || { echo "::error::terraform directory not found"; exit 1; }
           
-          # Get raw outputs and clean them
-          AKS_RG=$(terraform output -raw aks_resource_group | head -n 1 | tr -d '\n')
-          AKS_CLUSTER=$(terraform output -raw aks_cluster_name | head -n 1 | tr -d '\n')
+          # Get outputs using direct file writing
+          terraform output -raw aks_resource_group > aks_rg.txt
+          terraform output -raw aks_cluster_name > aks_cluster.txt
+          
+          # Read values from files
+          AKS_RG=$(cat aks_rg.txt)
+          AKS_CLUSTER=$(cat aks_cluster.txt)
+          
+          # Clean values (remove any debug lines)
+          AKS_RG=$(echo "$AKS_RG" | head -n 1 | tr -d '\n')
+          AKS_CLUSTER=$(echo "$AKS_CLUSTER" | head -n 1 | tr -d '\n')
           
           # Verify outputs
           if [ -z "$AKS_RG" ] || [ -z "$AKS_CLUSTER" ]; then
             echo "::error::Failed to get Terraform outputs"
             echo "Debug output:"
-            terraform output -raw aks_resource_group
-            terraform output -raw aks_cluster_name
+            cat aks_rg.txt
+            cat aks_cluster.txt
             exit 1
           fi
           
           # Set environment variables
           echo "AKS_RG=$AKS_RG" >> $GITHUB_ENV
           echo "AKS_CLUSTER=$AKS_CLUSTER" >> $GITHUB_ENV
-          
-          # Debug output
-          echo "Successfully extracted:"
-          echo "AKS_RG=$AKS_RG"
-          echo "AKS_CLUSTER=$AKS_CLUSTER"
        
 
       - name: Configure AKS Credentials
         run: |
+          az upgrade --yes
           az aks get-credentials \
             --resource-group "$AKS_RG" \
             --name "$AKS_CLUSTER" \
             --overwrite-existing
+            --api-version=2024-03-01
           
           # Verify cluster access
           kubectl cluster-info
