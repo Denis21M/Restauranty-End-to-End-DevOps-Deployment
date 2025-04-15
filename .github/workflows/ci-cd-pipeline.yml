@@ -37,7 +37,11 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/auth:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/auth:latest
           build-args: |
-            ENV_FILE=./backend/auth/.env
+            MONGODB_URI=${{ secrets.MONGODB_URI }}
+            SECRET=${{ secrets.SECRET }}
+            CLOUD_NAME=${{ secrets.CLOUD_NAME }}
+            CLOUD_API_KEY=${{ secrets.CLOUD_API_KEY }}
+            CLOUD_API_SECRET=${{ secrets.CLOUD_API_SECRET }}
 
       - name: Build and push discounts service
         uses: docker/build-push-action@v6
@@ -48,7 +52,11 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/discounts:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/discounts:latest
           build-args: |
-            ENV_FILE=./backend/discounts/.env
+            MONGODB_URI=${{ secrets.MONGODB_URI }}
+            SECRET=${{ secrets.SECRET }}
+            CLOUD_NAME=${{ secrets.CLOUD_NAME }}
+            CLOUD_API_KEY=${{ secrets.CLOUD_API_KEY }}
+            CLOUD_API_SECRET=${{ secrets.CLOUD_API_SECRET }}
 
       - name: Build and push items service
         uses: docker/build-push-action@v6
@@ -59,7 +67,11 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/items:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/items:latest
           build-args: |
-            ENV_FILE=./backend/items/.env
+            MONGODB_URI=${{ secrets.MONGODB_URI }}
+            SECRET=${{ secrets.SECRET }}
+            CLOUD_NAME=${{ secrets.CLOUD_NAME }}
+            CLOUD_API_KEY=${{ secrets.CLOUD_API_KEY }}
+            CLOUD_API_SECRET=${{ secrets.CLOUD_API_SECRET }}
 
       - name: Build and push client
         uses: docker/build-push-action@v6
@@ -70,7 +82,7 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/client:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/client:latest
           build-args: |
-            ENV_FILE=./client/.env
+            REACT_APP_SERVER_URL=${REACT_APP_SERVER_URL}
 
      
       - name: Azure Login

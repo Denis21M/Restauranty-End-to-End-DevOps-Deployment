@@ -8,10 +8,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Temporarily allow .env for build-time use (won't exist in final image)
-ARG ENV_FILE=.env
-COPY --chown=node:node ${ENV_FILE} .env.tmp
-RUN set -a && . .env.tmp && rm -f .env.tmp && npm run build
+# 2. Create empty .env file (will be populated later)
+RUN touch .env
 
 # Copy the rest of the app and build it
 COPY . .
