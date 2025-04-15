@@ -114,8 +114,9 @@ jobs:
       - name: Get Terraform Outputs
         id: tf_outputs
         run: |
-          echo "AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group)" >> $GITHUB_OUTPUT
-          echo "AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name)" >> $GITHUB_OUTPUT
+          echo "AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group 2>/dev/null)" >> $GITHUB_OUTPUT
+          echo "AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name 2>/dev/null)" >> $GITHUB_OUTPUT
+
 
       - name: Set AKS Credentials
         run: |
