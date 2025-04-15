@@ -36,6 +36,7 @@ resource "azurerm_public_ip" "ingress_ip" {
   resource_group_name = azurerm_resource_group.aks_rg.name
   allocation_method   = "Static"
   sku                 = "Standard"
+  domain_name_label   = "bud-restauranty-app"
 }
 
 output "ingress_public_ip" {
