@@ -112,18 +112,12 @@ jobs:
 
       - name: Get Terraform Outputs
         id: tf_outputs
+        env:
+          TF_LOG: ERROR 
         run: |
-          echo "Fetching outputs..."
-          AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group 2>/dev/null || echo "")
-          AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name 2>/dev/null || echo "")
+          echo "AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group)" >> $GITHUB_ENV
+          echo "AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name)" >> $GITHUB_ENV
 
-          if [ -z "$AKS_RG" ] || [ -z "$AKS_CLUSTER" ]; then
-            echo "❌ Failed to get required outputs from Terraform"
-            exit 1
-          fi
-
-          echo "AKS_RG=$AKS_RG" >> $GITHUB_ENV
-          echo "AKS_CLUSTER=$AKS_CLUSTER" >> $GITHUB_ENV
 
       - name: Set AKS Credentials
         run: |
