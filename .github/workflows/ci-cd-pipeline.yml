@@ -36,6 +36,8 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/auth:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/auth:latest
+          build-args: |
+            ENV_FILE=./backend/auth/.env
 
       - name: Build and push discounts service
         uses: docker/build-push-action@v6
@@ -45,6 +47,8 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/discounts:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/discounts:latest
+          build-args: |
+            ENV_FILE=./backend/discounts/.env
 
       - name: Build and push items service
         uses: docker/build-push-action@v6
@@ -54,6 +58,8 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/items:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/items:latest
+          build-args: |
+            ENV_FILE=./backend/items/.env
 
       - name: Build and push client
         uses: docker/build-push-action@v6
@@ -63,6 +69,8 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/client:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/client:latest
+          build-args: |
+            ENV_FILE=./client/.env
 
      
       - name: Azure Login

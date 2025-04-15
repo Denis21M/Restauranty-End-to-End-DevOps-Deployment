@@ -8,6 +8,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+# Temporarily allow .env for build-time use (won't exist in final image)
+ARG ENV_FILE=.env
+COPY --chown=node:node ${ENV_FILE} .env.tmp
+RUN set -a && . .env.tmp && rm -f .env.tmp && npm run build
+
 # Copy the rest of the app and build it
 COPY . .
 RUN npm run build
@@ -20,11 +25,3 @@ EXPOSE 3000
 
 # Start the static file server
 CMD ["serve", "-s", "build", "-l", "3000"]
-
-# Define build-time variables
-ARG REACT_APP_SERVER_URL
-ARG PORT=3000
-
-# Use them as environment variables at runtime
-ENV REACT_APP_SERVER_URL=${REACT_APP_SERVER_URL}
-ENV PORT=3000
