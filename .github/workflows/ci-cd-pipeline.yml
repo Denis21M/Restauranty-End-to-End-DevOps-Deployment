@@ -111,21 +111,15 @@ jobs:
         working-directory: terraform/
 
 
-      - name: Get Terraform Outputs
+      - name: Extract Terraform outputs
         id: tf_outputs
         run: |
-          AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group)
-          AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name)
-          echo "::set-output name=AKS_RG::$AKS_RG"
-          echo "::set-output name=AKS_CLUSTER::$AKS_CLUSTER"
-
+          echo "AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group 2>/dev/null)" >> $GITHUB_ENV
+          echo "AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name 2>/dev/null)" >> $GITHUB_ENV
 
       - name: Set AKS Credentials
         run: |
-          az aks get-credentials \
-            --resource-group ${{ steps.tf_outputs.outputs.AKS_RG }} \
-            --name ${{ steps.tf_outputs.outputs.AKS_CLUSTER }} \
-            --admin \
+          az aks get-credentials --resource-group "$AKS_RG" --name "$AKS_CLUSTER" --overwrite-existing
 
 
       - name: Install kubectl
