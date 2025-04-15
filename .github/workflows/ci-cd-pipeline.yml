@@ -125,24 +125,23 @@ jobs:
 
       - name: Configure AKS credentials
         run: |
-          # Set Azure CLI to use stable API version
-          az config set core.allow_broker=true
-          az config set extension.use_dynamic_install=yes_without_prompt
+          # Clean up any existing kubeconfig
+          rm -f ~/.kube/config
           
-          # Get credentials with explicit API version and retries
-          for i in {1..3}; do
-            if az aks get-credentials \
-              --resource-group "$AKS_RG" \
-              --name "$AKS_CLUSTER" \
-              --overwrite-existing \
-              --api-version=2023-07-01; then
-              break
-            fi
-            sleep 5
-            echo "Retrying AKS credential setup (attempt $i/3)..."
-          done
+          # Get cluster credentials (basic version)
+          az aks get-credentials \
+            --resource-group "$AKS_RG" \
+            --name "$AKS_CLUSTER" \
+            --overwrite-existing
           
-          # Verify cluster access
+          # Alternative with admin credentials if needed
+          # az aks get-credentials \
+          #   --resource-group "$AKS_RG" \
+          #   --name "$AKS_CLUSTER" \
+          #   --admin \
+          #   --overwrite-existing
+          
+          # Verify connectivity
           kubectl cluster-info
           kubectl get nodes
 
