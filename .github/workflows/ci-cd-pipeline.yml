@@ -123,17 +123,28 @@ jobs:
           echo "AKS_CLUSTER=$AKS_CLUSTER" >> $GITHUB_ENV
        
 
-      - name: Configure AKS Credentials
+      - name: Configure AKS credentials
         run: |
-          az upgrade --yes
-          az aks get-credentials \
-            --resource-group "$AKS_RG" \
-            --name "$AKS_CLUSTER" \
-            --overwrite-existing
-            --api-version=2024-03-01
+          # Set Azure CLI to use stable API version
+          az config set core.allow_broker=true
+          az config set extension.use_dynamic_install=yes_without_prompt
+          
+          # Get credentials with explicit API version and retries
+          for i in {1..3}; do
+            if az aks get-credentials \
+              --resource-group "$AKS_RG" \
+              --name "$AKS_CLUSTER" \
+              --overwrite-existing \
+              --api-version=2023-07-01; then
+              break
+            fi
+            sleep 5
+            echo "Retrying AKS credential setup (attempt $i/3)..."
+          done
           
           # Verify cluster access
           kubectl cluster-info
+          kubectl get nodes
 
       - name: Setup Kubernetes Tools
         run: |
