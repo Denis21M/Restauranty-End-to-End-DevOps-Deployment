@@ -102,7 +102,7 @@ jobs:
 
       - name: Import existing Public IP
         run: |
-          terraform import azurerm_public_ip.ingress_ip "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/bud-restauranty-rg/providers/Microsoft.Network/publicIPAddresses/ingress_ip"
+          terraform import azurerm_public_ip.ingress_ip "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/bud-restauranty-rg/providers/Microsoft.Network/publicIPAddresses/ingress-public-ip"
         working-directory: terraform/
 
 
