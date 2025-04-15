@@ -126,20 +126,20 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+          
       - name: Configure AKS credentials
         run: |
-          # Clean up previous configs
-          rm -f ~/.kube/config
-          mkdir -p ~/.kube
-
-          # Get AKS credentials
+          # Clean up any existing kubeconfig
+          rm -rf ~/.azure
+          rm -f ~/.kube
+          
+          # Get cluster credentials (basic version)
           az aks get-credentials \
             --resource-group "$AKS_RG" \
             --name "$AKS_CLUSTER" \
             --overwrite-existing
-
-          # Verify access
+          
+          # Verify connectivity
           kubectl cluster-info
           kubectl get nodes
 
