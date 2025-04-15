@@ -21,3 +21,9 @@ variable "agent_count" {
   description = "Number of nodes in the node pool"
   default     = 3
 }
+
+variable "subscription_id" {
+  description = "Azure Subscription ID"
+  type        = string
+  sensitive   = true  # Marks this as sensitive in outputs
+}

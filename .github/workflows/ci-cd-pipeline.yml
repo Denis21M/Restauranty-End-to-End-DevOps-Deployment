@@ -91,6 +91,8 @@ jobs:
         id: tf-apply
         run: |
           terraform apply -auto-approve
+          env:
+            TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         working-directory: terraform/
 
       - name: Extract Terraform outputs
