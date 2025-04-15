@@ -90,20 +90,29 @@ jobs:
         id: tf-apply
         run: |
           terraform apply -auto-approve
+      
+
+      - name: Extract Terraform outputs
+        run: |
+          # Get raw outputs without debug info
+          AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group | grep -v '::debug::')
+          AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name | grep -v '::debug::')
           
-          # Capture outputs with validation
-          AKS_RG=$(terraform output -raw aks_resource_group)
-          AKS_CLUSTER=$(terraform output -raw aks_cluster_name)
-          
+          # Verify outputs
           if [ -z "$AKS_RG" ] || [ -z "$AKS_CLUSTER" ]; then
-            echo "::error::Failed to get required Terraform outputs"
+            echo "::error::Failed to get Terraform outputs"
             exit 1
           fi
           
+          # Set environment variables
           echo "AKS_RG=$AKS_RG" >> $GITHUB_ENV
           echo "AKS_CLUSTER=$AKS_CLUSTER" >> $GITHUB_ENV
-        working-directory: terraform/
-
+          
+          # Debug output (visible in logs)
+          echo "Extracted AKS_RG: $AKS_RG"
+          echo "Extracted AKS_CLUSTER: $AKS_CLUSTER"
+          
+      
 
       - name: Configure AKS Credentials
         run: |
