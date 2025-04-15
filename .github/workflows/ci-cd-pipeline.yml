@@ -123,7 +123,7 @@ jobs:
           echo "AKS_CLUSTER=$AKS_CLUSTER" >> $GITHUB_ENV
        
       - name: Login to Azure
-        uses: azure/login@v2
+        uses: az login
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
           
