@@ -90,10 +90,7 @@ jobs:
         id: tf-apply
         run: |
           terraform apply -auto-approve
-      
-
-      - name: Extract Terraform outputs
-        run: |
+       
           # Get raw outputs without debug info
           AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group | grep -v '::debug::')
           AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name | grep -v '::debug::')
@@ -112,7 +109,8 @@ jobs:
           echo "Extracted AKS_RG: $AKS_RG"
           echo "Extracted AKS_CLUSTER: $AKS_CLUSTER"
           
-      
+        working-directory: terraform/
+
 
       - name: Configure AKS Credentials
         run: |
