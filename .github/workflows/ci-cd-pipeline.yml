@@ -126,20 +126,14 @@ jobs:
       - name: Configure AKS credentials
         run: |
           # Clean up any existing kubeconfig
-          rm -f ~/.kube/config
+          rm -rf ~/.azure
+          rm -f ~/.kube
           
           # Get cluster credentials (basic version)
           az aks get-credentials \
             --resource-group "$AKS_RG" \
             --name "$AKS_CLUSTER" \
             --overwrite-existing
-          
-          # Alternative with admin credentials if needed
-          # az aks get-credentials \
-          #   --resource-group "$AKS_RG" \
-          #   --name "$AKS_CLUSTER" \
-          #   --admin \
-          #   --overwrite-existing
           
           # Verify connectivity
           kubectl cluster-info
