@@ -122,17 +122,15 @@ jobs:
           echo "AKS_RG=$AKS_RG" >> $GITHUB_ENV
           echo "AKS_CLUSTER=$AKS_CLUSTER" >> $GITHUB_ENV
        
-
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
       - name: Configure AKS credentials
         run: |
           # Clean up any existing kubeconfig
           rm -rf ~/.azure
           rm -f ~/.kube
-
-          az login --service-principal \
-          uses: azure/login@v2
-          with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
           
           # Get cluster credentials (basic version)
           az aks get-credentials \
