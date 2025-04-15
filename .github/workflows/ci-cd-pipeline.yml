@@ -92,8 +92,8 @@ jobs:
           terraform apply -auto-approve
        
           # Get raw outputs without debug info
-          AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group | grep -v '::debug::')
-          AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name | grep -v '::debug::')
+          AKS_RG=$(terraform -chdir=terraform/ output -raw aks_resource_group | grep -v '::debug::')
+          AKS_CLUSTER=$(terraform -chdir=terraform/ output -raw aks_cluster_name | grep -v '::debug::')
           
           # Verify outputs
           if [ -z "$AKS_RG" ] || [ -z "$AKS_CLUSTER" ]; then
@@ -108,7 +108,7 @@ jobs:
           # Debug output (visible in logs)
           echo "Extracted AKS_RG: $AKS_RG"
           echo "Extracted AKS_CLUSTER: $AKS_CLUSTER"
-          
+
         working-directory: terraform/
 
 
