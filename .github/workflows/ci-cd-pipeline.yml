@@ -75,6 +75,13 @@ jobs:
           inlineScript: |
             az account show
       
+      - name: Azure PowerShell script
+        uses: azure/powershell@v2
+        with:
+          azPSVersion: "latest"
+          inlineScript: |
+            Get-AzWebApp
+        
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
