@@ -91,32 +91,30 @@ jobs:
         run: |
           terraform apply -auto-approve
         working-directory: terraform/
+        
 
       - name: Extract Terraform outputs
         run: |
-          cd terraform || exit 1
+          cd terraform || { echo "::error::terraform directory not found"; exit 1; }
           
-          # Get outputs with proper error handling
-          AKS_RG=$(terraform output -raw aks_resource_group 2>&1)
-          if [[ "$AKS_RG" =~ "Error" ]]; then
-            echo "::error::Failed to get AKS_RG: $AKS_RG"
+          # Clean output by redirecting debug to stderr and capturing only raw output
+          {
+            AKS_RG=$(terraform output -raw aks_resource_group 2> >(grep -v '::debug::' >&2))
+            AKS_CLUSTER=$(terraform output -raw aks_cluster_name 2> >(grep -v '::debug::' >&2))
+          } || { echo "::error::Failed to get Terraform outputs"; exit 1; }
+          
+          # Verify outputs are not empty
+          if [ -z "$AKS_RG" ] || [ -z "$AKS_CLUSTER" ]; then
+            echo "::error::Empty Terraform outputs detected"
             exit 1
           fi
           
-          AKS_CLUSTER=$(terraform output -raw aks_cluster_name 2>&1)
-          if [[ "$AKS_CLUSTER" =~ "Error" ]]; then
-            echo "::error::Failed to get AKS_CLUSTER: $AKS_CLUSTER"
-            exit 1
-          fi
-          
-          # Set environment variables
+          # Set environment variables (with debug output)
+          echo "Setting AKS_RG=$AKS_RG"
           echo "AKS_RG=$AKS_RG" >> $GITHUB_ENV
-          echo "AKS_CLUSTER=$AKS_CLUSTER" >> $GITHUB_ENV
           
-          # Verify outputs
-          echo "Extracted:"
-          echo "AKS_RG=$AKS_RG"
-          echo "AKS_CLUSTER=$AKS_CLUSTER"
+          echo "Setting AKS_CLUSTER=$AKS_CLUSTER"
+          echo "AKS_CLUSTER=$AKS_CLUSTER" >> $GITHUB_ENV
        
 
       - name: Configure AKS Credentials
