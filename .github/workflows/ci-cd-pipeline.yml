@@ -90,14 +90,22 @@ jobs:
         id: tf-apply
         run: |
           terraform apply -auto-approve
-       
-          # Get raw outputs without debug info
-          AKS_RG=$(terraform -chdir=terraform/ output -raw aks_resource_group | grep -v '::debug::')
-          AKS_CLUSTER=$(terraform -chdir=terraform/ output -raw aks_cluster_name | grep -v '::debug::')
+        working-directory: terraform/
+
+      - name: Extract Terraform outputs
+        run: |
+          cd terraform || exit 1
           
-          # Verify outputs
-          if [ -z "$AKS_RG" ] || [ -z "$AKS_CLUSTER" ]; then
-            echo "::error::Failed to get Terraform outputs"
+          # Get outputs with proper error handling
+          AKS_RG=$(terraform output -raw aks_resource_group 2>&1)
+          if [[ "$AKS_RG" =~ "Error" ]]; then
+            echo "::error::Failed to get AKS_RG: $AKS_RG"
+            exit 1
+          fi
+          
+          AKS_CLUSTER=$(terraform output -raw aks_cluster_name 2>&1)
+          if [[ "$AKS_CLUSTER" =~ "Error" ]]; then
+            echo "::error::Failed to get AKS_CLUSTER: $AKS_CLUSTER"
             exit 1
           fi
           
@@ -105,12 +113,11 @@ jobs:
           echo "AKS_RG=$AKS_RG" >> $GITHUB_ENV
           echo "AKS_CLUSTER=$AKS_CLUSTER" >> $GITHUB_ENV
           
-          # Debug output (visible in logs)
-          echo "Extracted AKS_RG: $AKS_RG"
-          echo "Extracted AKS_CLUSTER: $AKS_CLUSTER"
-
-        working-directory: terraform/
-
+          # Verify outputs
+          echo "Extracted:"
+          echo "AKS_RG=$AKS_RG"
+          echo "AKS_CLUSTER=$AKS_CLUSTER"
+       
 
       - name: Configure AKS Credentials
         run: |
