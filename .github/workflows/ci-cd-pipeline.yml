@@ -91,30 +91,41 @@ jobs:
         run: |
           terraform apply -auto-approve
         working-directory: terraform/
-        
+
 
       - name: Extract Terraform outputs
         run: |
-          cd terraform || { echo "::error::terraform directory not found"; exit 1; }
-          
-          # Clean output by redirecting debug to stderr and capturing only raw output
-          {
-            AKS_RG=$(terraform output -raw aks_resource_group 2> >(grep -v '::debug::' >&2))
-            AKS_CLUSTER=$(terraform output -raw aks_cluster_name 2> >(grep -v '::debug::' >&2))
-          } || { echo "::error::Failed to get Terraform outputs"; exit 1; }
-          
-          # Verify outputs are not empty
-          if [ -z "$AKS_RG" ] || [ -z "$AKS_CLUSTER" ]; then
-            echo "::error::Empty Terraform outputs detected"
+          # Change to terraform directory (verify it exists)
+          if [ ! -d "terraform" ]; then
+            echo "::error::terraform directory not found"
+            ls -la  # Debug directory structure
             exit 1
           fi
           
-          # Set environment variables (with debug output)
-          echo "Setting AKS_RG=$AKS_RG"
-          echo "AKS_RG=$AKS_RG" >> $GITHUB_ENV
+          cd terraform
           
-          echo "Setting AKS_CLUSTER=$AKS_CLUSTER"
-          echo "AKS_CLUSTER=$AKS_CLUSTER" >> $GITHUB_ENV
+          # Get outputs using JSON format and jq
+          terraform output -json > outputs.json
+          cat outputs.json  # Debug output
+          
+          # Extract values using jq
+          AKS_RG=$(jq -r '.aks_resource_group.value' outputs.json)
+          AKS_CLUSTER=$(jq -r '.aks_cluster_name.value' outputs.json)
+          
+          # Verify outputs
+          if [ -z "$AKS_RG" ] || [ -z "$AKS_CLUSTER" ]; then
+            echo "::error::Failed to extract outputs from outputs.json"
+            exit 1
+          fi
+          
+          # Set environment variables (with proper escaping)
+          echo "AKS_RG=${AKS_RG}" >> $GITHUB_ENV
+          echo "AKS_CLUSTER=${AKS_CLUSTER}" >> $GITHUB_ENV
+          
+          # Debug output
+          echo "Successfully set:"
+          echo "AKS_RG=${AKS_RG}"
+          echo "AKS_CLUSTER=${AKS_CLUSTER}"
        
 
       - name: Configure AKS Credentials
