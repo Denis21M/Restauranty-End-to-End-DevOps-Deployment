@@ -88,11 +88,10 @@ jobs:
         working-directory: terraform/
 
       - name: Terraform Apply
-        id: tf-apply
         run: |
-          terraform apply -auto-approve
           env:
-            subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          terraform apply -auto-approve
         working-directory: terraform/
 
       - name: Extract Terraform outputs

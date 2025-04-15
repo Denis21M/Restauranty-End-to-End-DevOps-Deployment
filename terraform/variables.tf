@@ -25,5 +25,5 @@ variable "agent_count" {
 variable "subscription_id" {
   description = "Azure Subscription ID"
   type        = string
-  sensitive   = true  # Marks this as sensitive in outputs
+  sensitive   = true
 }
