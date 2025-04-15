@@ -81,7 +81,10 @@ jobs:
         working-directory: terraform/
 
       - name: Import existing resources
+        env:
+          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         run: |
+          echo "Using subscription ID: $TF_VAR_subscription_id"
           terraform import azurerm_resource_group.aks_rg "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/bud-restauranty-rg" || echo "Import may have failed (resource may already exist)"
           terraform import azurerm_kubernetes_cluster.aks "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/bud-restauranty-rg/providers/Microsoft.ContainerService/managedClusters/bud-restauranty-cluster" || echo "Import may have failed (resource may already exist)"
           terraform import azurerm_public_ip.ingress_ip "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/bud-restauranty-rg/providers/Microsoft.Network/publicIPAddresses/ingress-public-ip" || echo "Import may have failed (resource may already exist)"
