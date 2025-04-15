@@ -92,32 +92,21 @@ jobs:
           terraform apply -auto-approve
         working-directory: terraform/
 
-      - name: Install jq
-        run: sudo apt-get update && sudo apt-get install -y jq
-
       - name: Extract Terraform outputs
         run: |
           # Change to terraform directory
           cd terraform || { echo "::error::terraform directory not found"; exit 1; }
           
-          # Get clean JSON output (replace *** with quotes)
-          terraform output -json | sed 's/***/"/g' > outputs.json
-          
-          # Verify JSON file
-          if [ ! -s outputs.json ]; then
-            echo "::error::Empty outputs.json file"
-            exit 1
-          fi
-          
-          # Extract values (with error handling)
-          AKS_RG=$(jq -r '.aks_resource_group.value' outputs.json 2>/dev/null)
-          AKS_CLUSTER=$(jq -r '.aks_cluster_name.value' outputs.json 2>/dev/null)
+          # Get raw outputs and clean them
+          AKS_RG=$(terraform output -raw aks_resource_group | head -n 1 | tr -d '\n')
+          AKS_CLUSTER=$(terraform output -raw aks_cluster_name | head -n 1 | tr -d '\n')
           
           # Verify outputs
           if [ -z "$AKS_RG" ] || [ -z "$AKS_CLUSTER" ]; then
-            echo "::error::Failed to extract outputs from outputs.json"
-            echo "Raw JSON content:"
-            cat outputs.json
+            echo "::error::Failed to get Terraform outputs"
+            echo "Debug output:"
+            terraform output -raw aks_resource_group
+            terraform output -raw aks_cluster_name
             exit 1
           fi
           
