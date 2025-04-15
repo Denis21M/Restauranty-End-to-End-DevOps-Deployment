@@ -88,9 +88,10 @@ jobs:
         working-directory: terraform/
 
       - name: Terraform Apply
+        env:
+          TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         run: |
-          env:
-            TF_VAR_subscription_id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          echo "Using subscription ID: $TF_VAR_subscription_id"
           terraform apply -auto-approve
         working-directory: terraform/
 
