@@ -128,6 +128,11 @@ jobs:
           # Clean up any existing kubeconfig
           rm -rf ~/.azure
           rm -f ~/.kube
+
+          az login --service-principal \
+          uses: azure/login@v2
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
           
           # Get cluster credentials (basic version)
           az aks get-credentials \
