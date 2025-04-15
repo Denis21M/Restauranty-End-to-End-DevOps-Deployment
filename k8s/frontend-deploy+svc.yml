@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-react-client
+  template:
+    metadata:
+      labels:
+        app: my-react-client
+    spec:
+      containers:
+      - name: my-react-client
+        image: bacon21/client:latest
+        ports:
+          - containerPort: 3000
+        env:
+         REACT_APP_SERVER_URL=${{ REACT_APP_SERVER_URL }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-service
+spec:
+  selector:
+    app: my-react-client
+  ports:
+    - port: 3000
+      targetPort: 3000

@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: items-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-items
+  template:
+    metadata:
+      labels:
+        app: backend-items
+    spec:
+      containers:
+      - name: backend-items
+        image: bacon21/items:latest
+        ports:
+          - containerPort: 3003
+        env:
+         SECRET: ${{ secrets.SECRET }}
+         MONGODB_URI: ${{ secrets.MONGODB_URI }}
+         CLOUD_NAME: ${{ secrets.CLOUD_NAME }}
+         CLOUD_API_KEY: ${{ secrets.CLOUD_API_KEY }}
+         CLOUD_API_SECRET: ${{ secrets.CLOUD_API_SECRET }}
+         
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: items-service
+spec:
+  selector:
+    app: backend-items
+  ports:
+    - port: 3003
+      targetPort: 3003

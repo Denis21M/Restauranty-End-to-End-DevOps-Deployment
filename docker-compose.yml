@@ -1,0 +1,90 @@
+services:
+  backend-auth:
+    build:
+      context: ./backend/auth
+      dockerfile: Dockerfile
+    container_name: backend-auth
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./backend/auth/.env
+    depends_on:
+      - mongodb
+    networks:
+      - restauranty-network
+
+  backend-discounts:
+    build:
+      context: ./backend/discounts
+      dockerfile: Dockerfile
+    container_name: backend-discounts
+    ports:
+      - "3002:3002"
+    env_file:
+      - ./backend/discounts/.env
+    depends_on:
+      - mongodb
+    networks:
+      - restauranty-network
+
+  backend-items:
+    build:
+      context: ./backend/items
+      dockerfile: Dockerfile
+    container_name: backend-items
+    ports:
+      - "3003:3003"
+    env_file:
+      - ./backend/items/.env
+    depends_on:
+      - mongodb
+    networks:
+      - restauranty-network
+
+  my-react-client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: my-react-client
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./client/.env
+    depends_on:
+      - backend-auth
+      - backend-discounts
+      - backend-items
+    networks:
+      - restauranty-network
+
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    ports:
+      - "80:80"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - backend-auth
+      - backend-discounts
+      - backend-items
+      - my-react-client
+    networks:
+      - restauranty-network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+    - mongodb_data:/data/db
+    networks:
+      - restauranty-network
+      
+networks:
+  restauranty-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:

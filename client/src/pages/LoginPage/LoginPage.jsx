@@ -4,27 +4,21 @@ import { AuthContext } from "../../context/auth.context";
 import authService from "../../services/auth.service";
 import { MdEmail } from "react-icons/md"
 import { FaLock } from "react-icons/fa6"
-
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState(undefined);
-
   const { storeToken, authenticateUser } = useContext(AuthContext);
-
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
-
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     const requestBody = { email, password };
-
     // Send a request to the server using axios
-    /* 
+    /*
     axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/login`)
       .then((response) => {})
     */
-
     // Or using a service
     authService
       .login(requestBody)
@@ -41,12 +35,10 @@ function LoginPage() {
         setErrorMessage(errorDescription);
       });
   };
-
   return (
     <div className="mainlogin">
       <div className="LoginPage">
         <h1>Login</h1>
-
         <form id="form" onSubmit={handleLoginSubmit}>
           <div className="inputwrap">
             <div className="relative mt-6 mb-6">
@@ -74,12 +66,8 @@ function LoginPage() {
             <Link to={"/signup"}> <p className="sign-up-link">Sign Up</p></Link>
           </div>
         </form>
-
-
-
       </div>
     </div>
   );
 }
-
 export default LoginPage;
