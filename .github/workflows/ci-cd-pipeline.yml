@@ -90,7 +90,11 @@ jobs:
         run: terraform plan
         working-directory: terraform/
 
-      
+      - name: Import existing resource group
+        run: |
+          terraform import azurerm_resource_group.aks_rg "/subscriptions/${{ secrets.AZURE_SUBSCRIPTION_ID }}/resourceGroups/bud-restauranty-rg"
+        working-directory: terraform/
+
       - name: Terraform Apply
         run: terraform apply -auto-approve
         working-directory: terraform/
@@ -98,11 +102,17 @@ jobs:
       - name: Get Terraform Outputs
         id: tf_outputs
         run: |
-          AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group || echo "")
-          AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name || echo "")
+          echo "Fetching outputs..."
+          AKS_RG=$(terraform -chdir=terraform output -raw aks_resource_group 2>/dev/null || echo "")
+          AKS_CLUSTER=$(terraform -chdir=terraform output -raw aks_cluster_name 2>/dev/null || echo "")
+
+          if [ -z "$AKS_RG" ] || [ -z "$AKS_CLUSTER" ]; then
+            echo "❌ Failed to get required outputs from Terraform"
+            exit 1
+          fi
+
           echo "AKS_RG=$AKS_RG" >> $GITHUB_ENV
           echo "AKS_CLUSTER=$AKS_CLUSTER" >> $GITHUB_ENV
-
 
       - name: Set AKS Credentials
         run: |
