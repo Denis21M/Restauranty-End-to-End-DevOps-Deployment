@@ -17,7 +17,18 @@ spec:
       - name: backend-items
         image: bacon21/items:latest
         ports:
-          - containerPort: 3003
+        - containerPort: 3003
+        env:
+          - name: DB_HOST
+            value: "mongo-service" 
+          - name: DB_PORT
+            value: "27017"
+          - name: DB_URI
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret
+                key: MONGODB_URI
+
          
 ---
 apiVersion: v1
