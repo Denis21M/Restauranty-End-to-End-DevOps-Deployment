@@ -214,7 +214,6 @@ jobs:
         run: |
           # Apply Kubernetes manifests
           kubectl apply -f k8s/
-          kubectl apply -f rollout-restart-deployments/
           
           
           # Verify deployments
