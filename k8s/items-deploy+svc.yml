@@ -18,32 +18,6 @@ spec:
         image: bacon21/items:latest
         ports:
           - containerPort: 3003
-        env:
-          - name: SECRET
-            valueFrom:
-              secretKeyRef:
-                name: items-secrets
-                key: SECRET
-          - name: MONGODB_URI
-            valueFrom:
-              secretKeyRef:
-                name: items-secrets
-                key: MONGODB_URI
-          - name: CLOUD_NAME
-            valueFrom:
-              secretKeyRef:
-                name: items-secrets
-                key: CLOUD_NAME
-          - name: CLOUD_API_KEY
-            valueFrom:
-              secretKeyRef:
-                name: items-secrets
-                key: CLOUD_API_KEY
-          - name: CLOUD_API_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: items-secrets
-                key: CLOUD_API_SECRET
          
 ---
 apiVersion: v1
