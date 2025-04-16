@@ -23,10 +23,10 @@ spec:
             value: "mongodb-service" 
           - name: DB_PORT
             value: "27017"
-          - name: DB_URI
+          - name: db-cred
             valueFrom:
               secretKeyRef:
-                name: DB_URI
+                name: db-cred
                 key: MONGODB_URI_AUTH
         
 ---
