@@ -49,6 +49,6 @@ jobs:
             echo "Waiting for rollout to complete..."
             if ! kubectl rollout status deployment/$deployment --timeout=90s; then
               echo "::warning:: Rollout for $deployment timed out. Cleaning up failed pods."
-              kubectl delete pods -l app=${deployment%-deployment} --field-selector=status.phase!=Running --force --grace-period=0
+              kubectl delete pods -l app=${deployment%-deployment} --field-selector=status.phase!=Running --force --grace-period=0 --validate=false
             fi
           done
