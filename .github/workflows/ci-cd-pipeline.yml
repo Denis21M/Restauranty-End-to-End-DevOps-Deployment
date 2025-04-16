@@ -82,7 +82,7 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/client:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/client:latest
           build-args: |
-            REACT_APP_SERVER_URL=http://132.164.33.232:80/api
+            REACT_APP_SERVER_URL=http://132.220.232.105:80/api 
 
      
       - name: Azure Login
@@ -204,6 +204,7 @@ jobs:
             --from-literal=MONGODB_URI_AUTH=${{ secrets.MONGODB_URI_AUTH }} \
             --from-literal=MONGODB_URI_DISCOUNTS=${{ secrets.MONGODB_URI_DISCOUNTS }} \
             --from-literal=MONGODB_URI_ITEMS=${{ secrets.MONGODB_URI_ITEMS }} \
+            --from-literal=MONGODB_URI=${{ secrets.MONGODB_URI }} \
             --from-literal=CLOUD_NAME=${{ secrets.CLOUD_NAME }} \
             --from-literal=CLOUD_API_KEY=${{ secrets.CLOUD_API_KEY }} \
             --from-literal=CLOUD_API_SECRET=${{ secrets.CLOUD_API_SECRET }} \
