@@ -195,11 +195,12 @@ jobs:
           # Apply Kubernetes manifests
           kubectl apply -f k8s/
           
-          # Restart deployments to ensure latest images
-          kubectl rollout restart deployment auth-deployment
-          kubectl rollout restart deployment discounts-deployment
-          kubectl rollout restart deployment items-deployment
-          kubectl rollout restart deployment client-deployment
+      - name: Rollout Restart
+        run: |
+          kubectl rollout restart deployment/auth-deployment
+          kubectl rollout restart deployment/discounts-deployment
+          kubectl rollout restart deployment/items-deployment
+          kubectl rollout restart deployment/client-deployment
           
           # Verify deployments
           kubectl get pods --watch
