@@ -213,10 +213,23 @@ jobs:
       - name: Deploy Applications
         run: |
           # Apply Kubernetes manifests
+          # Apply Kubernetes manifests
           kubectl apply -f k8s/
-          
-          
-          # Verify deployments
-          kubectl get pods --watch
-          kubectl get services --watch
-          kubectl get ingress --watch
+
+          # Wait for each deployment to be ready (optional but better than --watch)
+          deployments=(
+            "auth-deployment"
+            "discounts-deployment"
+            "items-deployment"
+            "client-deployment"
+          )
+
+          for dep in "${deployments[@]}"; do
+            echo "Waiting for rollout of $dep..."
+            kubectl rollout status deployment/$dep --timeout=90s
+          done
+
+          # Show final status for verification (not watched, so it exits)
+          kubectl get pods
+          kubectl get services
+          kubectl get ingress
