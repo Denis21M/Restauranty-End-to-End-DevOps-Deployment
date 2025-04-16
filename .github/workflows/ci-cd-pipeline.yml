@@ -207,12 +207,25 @@ jobs:
           # Apply Kubernetes manifests
           kubectl apply -f k8s/
           
-      - name: Rollout Restart
+      - name: Rollout Restart Deployments
         run: |
-          kubectl rollout restart deployment/auth-deployment
-          kubectl rollout restart deployment/discounts-deployment
-          kubectl rollout restart deployment/items-deployment
-          kubectl rollout restart deployment/client-deployment
+          deployments=(
+            "auth-deployment"
+            "discounts-deployment" 
+            "items-deployment"
+            "client-deployment"
+          )
+
+          for deployment in "${deployments[@]}"; do
+            echo "Restarting $deployment..."
+            kubectl rollout restart deployment/$deployment
+            
+            # Wait with timeout (adjust as needed)
+            if ! kubectl rollout status deployment/$deployment --timeout=90s; then
+              echo "::warning::Rollout for $deployment timed out - forcing cleanup"
+              kubectl delete pods --field-selector=status.phase!=Running --force --grace-period=0
+            fi
+          done
           
           # Verify deployments
           kubectl get pods --watch
