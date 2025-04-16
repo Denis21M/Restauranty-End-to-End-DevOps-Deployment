@@ -201,9 +201,9 @@ jobs:
       - name: Create Kubernetes Secrets
         run: |
           kubectl create secret generic db-credentials \
-            --from-literal=MONGODB_URI=${{ secrets.MONGODB_URI_AUTH }} \
-            --from-literal=MONGODB_URI=${{ secrets.MONGODB_URI_DISCOUNTS }} \
-            --from-literal=MONGODB_URI=${{ secrets.MONGODB_URI_ITEMS }} \
+            --from-literal=MONGODB_URI_AUTH=${{ secrets.MONGODB_URI_AUTH }} \
+            --from-literal=MONGODB_URI_DISCOUNTS=${{ secrets.MONGODB_URI_DISCOUNTS }} \
+            --from-literal=MONGODB_URI_ITEMS=${{ secrets.MONGODB_URI_ITEMS }} \
             --from-literal=CLOUD_NAME=${{ secrets.CLOUD_NAME }} \
             --from-literal=CLOUD_API_KEY=${{ secrets.CLOUD_API_KEY }} \
             --from-literal=CLOUD_API_SECRET=${{ secrets.CLOUD_API_SECRET }} \
