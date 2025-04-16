@@ -37,7 +37,7 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/auth:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/auth:latest
           build-args: |
-            MONGODB_URI=${{ secrets.MONGODB_URI }}
+            MONGODB_URI=${{ secrets.MONGODB_URI_AUTH }}
             SECRET=${{ secrets.SECRET }}
             CLOUD_NAME=${{ secrets.CLOUD_NAME }}
             CLOUD_API_KEY=${{ secrets.CLOUD_API_KEY }}
@@ -52,7 +52,7 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/discounts:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/discounts:latest
           build-args: |
-            MONGODB_URI=${{ secrets.MONGODB_URI }}
+            MONGODB_URI=${{ secrets.MONGODB_URI_DISCOUNTS }}
             SECRET=${{ secrets.SECRET }}
             CLOUD_NAME=${{ secrets.CLOUD_NAME }}
             CLOUD_API_KEY=${{ secrets.CLOUD_API_KEY }}
@@ -67,7 +67,7 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/items:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/items:latest
           build-args: |
-            MONGODB_URI=${{ secrets.MONGODB_URI }}
+            MONGODB_URI=${{ secrets.MONGODB_URI_ITEMS }}
             SECRET=${{ secrets.SECRET }}
             CLOUD_NAME=${{ secrets.CLOUD_NAME }}
             CLOUD_API_KEY=${{ secrets.CLOUD_API_KEY }}
@@ -201,7 +201,9 @@ jobs:
       - name: Create Kubernetes Secrets
         run: |
           kubectl create secret generic db-credentials \
-            --from-literal=MONGODB_URI=${{ secrets.MONGODB_URI }} \
+            --from-literal=MONGODB_URI=${{ secrets.MONGODB_URI_AUTH }} \
+            --from-literal=MONGODB_URI=${{ secrets.MONGODB_URI_DISCOUNTS }} \
+            --from-literal=MONGODB_URI=${{ secrets.MONGODB_URI_ITEMS }} \
             --from-literal=CLOUD_NAME=${{ secrets.CLOUD_NAME }} \
             --from-literal=CLOUD_API_KEY=${{ secrets.CLOUD_API_KEY }} \
             --from-literal=CLOUD_API_SECRET=${{ secrets.CLOUD_API_SECRET }} \

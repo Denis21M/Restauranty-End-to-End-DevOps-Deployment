@@ -19,15 +19,40 @@ spec:
         ports:
         - containerPort: 3003
         env:
-          - name: DB_HOST
-            value: "mongodb-service" 
-          - name: DB_PORT
-            value: "27017"
-          - name: db-cred
-            valueFrom:
-              secretKeyRef:
-                name: db-cred
-                key: MONGODB_URI_ITEMS
+        # Database Configuration
+        - name: MONGODB_URI_ITEMS
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: MONGODB_URI_ITEMS
+        - name: DB_HOST
+          value: "mongo-service"
+        - name: DB_PORT
+          value: "27017"
+        
+        # Application Secrets
+        - name: SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: SECRET
+        
+        # Cloudinary Configuration
+        - name: CLOUD_NAME
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: CLOUD_NAME
+        - name: CLOUD_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: CLOUD_API_KEY
+        - name: CLOUD_API_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: CLOUD_API_SECRET
 
          
 ---
