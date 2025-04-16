@@ -202,13 +202,6 @@ jobs:
             --from-literal=REACT_APP_SERVER_URL=${{ secrets.REACT_APP_SERVER_URL }} \
             --dry-run=client -o yaml | kubectl apply -f -
 
-      - name: Clean up old replicasets
-        run: |
-          for deployment in $(kubectl get deployments -o name); do
-            kubectl rollout status $deployment --timeout=30s || true
-            kubectl rollout undo $deployment --to-revision=0 || true
-          done
-
       - name: Deploy Applications
         run: |
           # Apply Kubernetes manifests
