@@ -178,6 +178,18 @@ jobs:
           
           # Install Helm
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+      
+      - name: Install Nginx Ingress Controller
+        run: |
+          # Add the ingress-nginx Helm repo
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+          helm repo update
+
+          # Install ingress-nginx
+          helm upgrade --install ingress-nginx ingress-nginx/ingress-nginx \
+            --namespace ingress-nginx \
+            --create-namespace \
+            --set controller.service.type=LoadBalancer \
 
       - name: Create Kubernetes Secrets
         run: |
@@ -211,3 +223,5 @@ jobs:
           
           # Verify deployments
           kubectl get pods --watch
+          kubectl get services --watch
+          kubectl get ingress --watch
