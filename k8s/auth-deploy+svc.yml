@@ -22,27 +22,27 @@ spec:
           - name: SECRET
             valueFrom:
               secretKeyRef:
-                name: SECRET
+                name: auth-secrets
                 key: SECRET
           - name: MONGODB_URI
             valueFrom:
               secretKeyRef:
-                name: MONGODB_URI
+                name: auth-secrets
                 key: MONGODB_URI
           - name: CLOUD_NAME
             valueFrom:
               secretKeyRef:
-                name: CLOUD_NAME
+                name: auth-secrets
                 key: CLOUD_NAME
           - name: CLOUD_API_KEY
             valueFrom:
               secretKeyRef:
-                name: CLOUD_API_KEY
+                name: auth-secrets
                 key: CLOUD_API_KEY
           - name: CLOUD_API_SECRET
             valueFrom:
               secretKeyRef:
-                name: CLOUD_API_SECRET
+                name: auth-secrets
                 key: CLOUD_API_SECRET
 ---
 apiVersion: v1
