@@ -20,14 +20,14 @@ spec:
         - containerPort: 3002
         env:
           - name: DB_HOST
-            value: "mongo-service" 
+            value: "mongodb-service" 
           - name: DB_PORT
             value: "27017"
           - name: DB_URI
             valueFrom:
               secretKeyRef:
-                name: mongo-secret
-                key: MONGODB_URI
+                name: DB_URI
+                key: MONGODB_URI_DISCOUNTS
         
 ---
 apiVersion: v1

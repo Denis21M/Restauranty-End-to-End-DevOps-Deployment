@@ -18,14 +18,14 @@ spec:
         ports:
         - containerPort: 27017
         env:
-        - name: DB_HOST
-          value: "mongo-service" 
+        - name: DB_NAME
+          value: "mongodb" 
         - name: DB_PORT
           value: "27017"
         - name: DB_URI
           valueFrom:
             secretKeyRef:
-              name: mongo-secret
+              name: DB_URI
               key: MONGODB_URI
 ---
 apiVersion: v1
