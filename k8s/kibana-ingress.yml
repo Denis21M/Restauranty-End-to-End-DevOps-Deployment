@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kibana-ingress
-  namespace: ingress-nginx
+  namespace: logging
   annotations:
     ingressClassName: "nginx"
 spec:
@@ -13,6 +13,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: kibana
+                name: kibana-kibana
                 port:
                   number: 5601
