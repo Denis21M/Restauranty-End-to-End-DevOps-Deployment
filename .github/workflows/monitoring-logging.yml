@@ -1,0 +1,55 @@
+name: Deploy Monitoring & Logging
+
+on:
+  workflow_run:
+    workflows: ["Rollout and Cleanup Deployments"]  
+    types:
+      - completed
+
+jobs:
+  deploy-monitoring-logging:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Get AKS credentials
+        run: |
+          az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_CLUSTER }} --overwrite-existing
+
+      - name: Add Helm Repos
+        run: |
+          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+          helm repo add grafana https://grafana.github.io/helm-charts
+          helm repo update
+
+      - name: Install Prometheus Stack
+        run: |
+          helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
+            --namespace monitoring --create-namespace
+
+      - name: Expose Grafana via Ingress
+        run: |
+          kubectl apply -f ./monitoring+logging/grafana-ingress.yml
+
+      - name: Deploy ELK Stack
+        run: |
+          helm repo add elastic https://helm.elastic.co
+          helm repo update
+          helm upgrade --install elasticsearch elastic/elasticsearch --namespace logging --create-namespace
+          helm upgrade --install kibana elastic/kibana --namespace logging
+          helm upgrade --install filebeat elastic/filebeat --namespace logging
+
+      - name: Expose Kibana via Ingress
+        run: |
+          kubectl apply -f ./monitoring+logging/kibana-ingress.yml

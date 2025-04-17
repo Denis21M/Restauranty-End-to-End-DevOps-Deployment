@@ -36,3 +36,7 @@ spec:
                 name: client-service
                 port:
                   number: 3000
+          
+
+
+

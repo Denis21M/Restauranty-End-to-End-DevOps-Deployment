@@ -213,7 +213,6 @@ jobs:
       - name: Deploy Applications
         run: |
           # Apply Kubernetes manifests
-          # Apply Kubernetes manifests
           kubectl apply -f k8s/
 
           # Wait for each deployment to be ready (optional but better than --watch)
