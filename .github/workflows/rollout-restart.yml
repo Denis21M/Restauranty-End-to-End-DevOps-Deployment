@@ -50,3 +50,8 @@ jobs:
               kubectl delete pods --field-selector=status.phase!=Running --force --grace-period=0
             fi
           done
+
+          # Show final status for verification (not watched, so it exits)
+          kubectl get pods
+          kubectl get services
+          kubectl get ingress
