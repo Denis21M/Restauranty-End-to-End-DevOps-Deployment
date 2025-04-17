@@ -36,19 +36,3 @@ spec:
                 name: client-service
                 port:
                   number: 3000
-          - path: /prometheus
-            pathType: Prefix
-            backend:
-              service:
-                name: prometheus-service
-                namespace: monitoring
-                port:
-                  number: 9090
-          - path: /kibana
-            pathType: Prefix
-            backend:
-              service:
-                name: kibana-service
-                namespace: logging
-                port:
-                  number: 5601
