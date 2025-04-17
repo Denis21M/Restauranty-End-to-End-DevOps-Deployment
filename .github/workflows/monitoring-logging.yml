@@ -101,11 +101,11 @@ jobs:
           helm upgrade --install elasticsearch elastic/elasticsearch 
             --namespace logging --create-namespace \
             --set security.enabled=true \
-            --set elasticsearchUsername=${{ elasticsearchUsername }} \
-            --set elasticsearchPassword=${{ elasticsearchPassword }} \
+            --set elasticsearchUsername=${{ secrets.elasticsearchUsername }} \
+            --set elasticsearchPassword=${{ secrets.elasticsearchPassword }} \
           kubectl create secret generic elasticsearch-master-credentials \
-          --from-literal=username=${{ elasticsearchUsername }} \
-          --from-literal=password=${{ elasticsearchPassword }} \
+          --from-literal=username=${{ secrets.elasticsearchUsername }} \
+          --from-literal=password=${{ secrets.elasticsearchPassword }} \
           -n logging \
           --dry-run=client -o yaml | kubectl apply -f -
           helm upgrade --install kibana elastic/kibana --namespace logging --timeout 10m --wait
