@@ -208,7 +208,7 @@ jobs:
             --from-literal=CLOUD_API_SECRET=${{ secrets.CLOUD_API_SECRET }} \
             --from-literal=SECRET=${{ secrets.SECRET }} \
             --from-literal=REACT_APP_SERVER_URL=${{ secrets.REACT_APP_SERVER_URL }} \
-            --dry-run=client -o yaml | kubectl apply -f -
+            --dry-run=client -o yaml | kubectl apply -f -    
 
       - name: Deploy Applications
         run: |
