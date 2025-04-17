@@ -110,24 +110,8 @@ jobs:
             --set auth.username=$Elastic_USERNAME \
             --set auth.password=$ELASTIC_PASSWORD
 
-          # Create secret for Kibana pre-install hook
-          kubectl create secret generic elasticsearch-master-credentials \
-            --from-literal=username=$ELASTIC_USERNAME \
-            --from-literal=password=$ELASTIC_PASSWORD \
-            -n logging \
-            --dry-run=client -o yaml | kubectl apply -f -
-
-          # Deploy Kibana
-          helm upgrade --install kibana elastic/kibana \
-            --namespace logging \
-            --timeout 10m \
-            --wait
-
           # Deploy Filebeat
           helm upgrade --install filebeat elastic/filebeat \
             --namespace logging
 
 
-      - name: Expose Kibana via Ingress
-        run: |
-          kubectl apply -f ./monitoring+logging/kibana-ingress.yml
