@@ -95,6 +95,9 @@ jobs:
 
 
       - name: Deploy ELK Stack
+        env:
+          ELASTIC_USERNAME: ${{ secrets.ELASTIC_USERNAME }}
+          ELASTIC_PASSWORD: ${{ secrets.ELASTIC_PASSWORD }}
         run: |
           helm repo add elastic https://helm.elastic.co
           helm repo update
@@ -103,13 +106,13 @@ jobs:
           helm upgrade --install elasticsearch elastic/elasticsearch \
             --namespace logging --create-namespace \
             --set security.enabled=true \
-            --set elasticsearchUsername=${{ secrets.elasticsearchUsername }} \
-            --set elasticsearchPassword=${{ secrets.elasticsearchPassword }}
+            --set elasticsearchUsername=$ELASTIC_USERNAME \
+            --set elasticsearchPassword=$ELASTIC_PASSWORD
 
           # Create secret for Kibana pre-install hook
           kubectl create secret generic elasticsearch-master-credentials \
-            --from-literal=username=${{ secrets.elasticsearchUsername }} \
-            --from-literal=password=${{ secrets.elasticsearchPassword }} \
+            --from-literal=username=$ELASTIC_USERNAME \
+            --from-literal=password=$ELASTIC_PASSWORD \
             -n logging \
             --dry-run=client -o yaml | kubectl apply -f -
 
