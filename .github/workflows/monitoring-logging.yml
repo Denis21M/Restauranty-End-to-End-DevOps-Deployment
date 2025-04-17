@@ -75,7 +75,7 @@ jobs:
           helm repo add grafana https://grafana.github.io/helm-charts
           helm repo update
 
-      - name: Install Prometheus Stack
+      - name: Install Prometheus Stack # bundled with grafana and node-exporter
         run: |
           helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
             --namespace monitoring --create-namespace
