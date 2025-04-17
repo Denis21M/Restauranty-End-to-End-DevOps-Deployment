@@ -107,7 +107,7 @@ jobs:
             --namespace logging --create-namespace \
             --set security.enabled=true \
             --set elasticsearch.username=$ELASTIC_USERNAME \
-            --set elasticsearch.password=$ELASTIC_PASSWORD \  
+            --set elasticsearch.password=$ELASTIC_PASSWORD   
 
           # Create secret for Kibana pre-install hook
           kubectl create secret generic elasticsearch-master-credentials \
