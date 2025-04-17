@@ -63,8 +63,8 @@ jobs:
         run: |
           # Get credentials with admin access (recommended for CI/CD)
           az aks get-credentials \
-            --resource-group "$AKS_RG" \
-            --name "$AKS_CLUSTER" \
+            --resource-group "bud-restauranty-rg" \
+            --name "bud-restauranty-cluster" \
             --admin \
             --overwrite-existing
 
