@@ -4,8 +4,8 @@ metadata:
   name: kibana-ingress
   namespace: logging
   annotations:
-    ingressClassName: "nginx"
 spec:
+  ingressClassName: nginx
   rules:
     - http:
         paths:
