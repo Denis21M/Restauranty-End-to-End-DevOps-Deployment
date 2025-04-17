@@ -86,11 +86,13 @@ jobs:
 
       - name: Clean up existing Kibana release (if any)
         run: |
+          # Uninstall Kibana release if it exists
           helm uninstall kibana --namespace=logging || true
+          # Clean up related resources manually
           kubectl delete serviceaccount pre-install-kibana-kibana -n logging --ignore-not-found
           kubectl delete configmap kibana-kibana-helm-scripts -n logging --ignore-not-found
-          kubectl delete role pre-install-kibana-kibana -n logging || echo "Role not found, skipping."
-
+          kubectl delete role pre-install-kibana-kibana -n logging --ignore-not-found
+          kubectl delete rolebinding pre-install-kibana-kibana -n logging --ignore-not-found
 
       - name: Deploy ELK Stack
         run: |
