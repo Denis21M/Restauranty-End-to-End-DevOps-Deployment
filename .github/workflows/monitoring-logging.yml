@@ -98,18 +98,31 @@ jobs:
         run: |
           helm repo add elastic https://helm.elastic.co
           helm repo update
-          helm upgrade --install elasticsearch elastic/elasticsearch 
+
+          # Deploy Elasticsearch
+          helm upgrade --install elasticsearch elastic/elasticsearch \
             --namespace logging --create-namespace \
             --set security.enabled=true \
             --set elasticsearchUsername=${{ secrets.elasticsearchUsername }} \
-            --set elasticsearchPassword=${{ secrets.elasticsearchPassword }} \
+            --set elasticsearchPassword=${{ secrets.elasticsearchPassword }}
+
+          # Create secret for Kibana pre-install hook
           kubectl create secret generic elasticsearch-master-credentials \
-          --from-literal=username=${{ secrets.elasticsearchUsername }} \
-          --from-literal=password=${{ secrets.elasticsearchPassword }} \
-          -n logging \
-          --dry-run=client -o yaml | kubectl apply -f -
-          helm upgrade --install kibana elastic/kibana --namespace logging --timeout 10m --wait
-          helm upgrade --install filebeat elastic/filebeat --namespace logging
+            --from-literal=username=${{ secrets.elasticsearchUsername }} \
+            --from-literal=password=${{ secrets.elasticsearchPassword }} \
+            -n logging \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+          # Deploy Kibana
+          helm upgrade --install kibana elastic/kibana \
+            --namespace logging \
+            --timeout 10m \
+            --wait
+
+          # Deploy Filebeat
+          helm upgrade --install filebeat elastic/filebeat \
+            --namespace logging
+
 
       - name: Expose Kibana via Ingress
         run: |
