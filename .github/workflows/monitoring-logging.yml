@@ -23,6 +23,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.5
+          terraform_wrapper: false
+
       - name: Extract Terraform outputs
         run: |
           # Change to terraform directory
