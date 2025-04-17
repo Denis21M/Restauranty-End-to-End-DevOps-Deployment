@@ -61,10 +61,6 @@ jobs:
        
       - name: Configure AKS credentials
         run: |
-          # Clean only Kubernetes config (preserve Azure auth)
-          rm -f ~/.kube/config
-          mkdir -p ~/.kube
-
           # Get credentials with admin access (recommended for CI/CD)
           az aks get-credentials \
             --resource-group "$AKS_RG" \
