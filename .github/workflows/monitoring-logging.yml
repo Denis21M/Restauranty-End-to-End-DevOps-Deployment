@@ -106,8 +106,9 @@ jobs:
           helm upgrade --install elasticsearch elastic/elasticsearch \
             --namespace logging --create-namespace \
             --set security.enabled=true \
-            --set elasticsearch.username=$ELASTIC_USERNAME \
-            --set elasticsearch.password=$ELASTIC_PASSWORD   
+            --set auth.enabled=true \
+            --set auth.username=$Elastic_USERNAME \
+            --set auth.password=$ELASTIC_PASSWORD
 
           # Create secret for Kibana pre-install hook
           kubectl create secret generic elasticsearch-master-credentials \
