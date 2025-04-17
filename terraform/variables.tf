@@ -19,7 +19,7 @@ variable "aks_cluster_name" {
 variable "agent_count" {
   type        = number
   description = "Number of nodes in the node pool"
-  default     = 6
+  default     = 5
 }
 
 variable "subscription_id" {
