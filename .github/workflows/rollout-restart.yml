@@ -50,13 +50,3 @@ jobs:
               kubectl delete pods --field-selector=status.phase!=Running --force --grace-period=0
             fi
           done
-
-      - name: Delete Completed Pods
-        run: |
-          completed_pods=$(kubectl get pods --field-selector=status.phase=Succeeded -o name)
-          if [ -n "$completed_pods" ]; then
-            echo "Deleting completed pods..."
-            echo "$completed_pods" | xargs kubectl delete
-          else
-            echo "No completed pods to delete."
-          fi
