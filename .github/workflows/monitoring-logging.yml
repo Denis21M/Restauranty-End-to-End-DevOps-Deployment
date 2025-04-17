@@ -84,6 +84,10 @@ jobs:
         run: |
           kubectl apply -f ./monitoring+logging/grafana-ingress.yml
 
+      - name: Clean up old Helm hook resources
+        run: |
+          kubectl delete configmap kibana-kibana-helm-scripts -n logging --ignore-not-found
+
       - name: Deploy ELK Stack
         run: |
           helm repo add elastic https://helm.elastic.co
