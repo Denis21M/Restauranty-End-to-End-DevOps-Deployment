@@ -2,7 +2,7 @@ name: Deploy Monitoring & Logging
 
 on:
   workflow_run:
-    workflows: ["Rollout and Cleanup Deployments"]  
+    workflows: [""]  
     types:
       - completed
 
@@ -84,16 +84,6 @@ jobs:
         run: |
           kubectl apply -f ./monitoring+logging/grafana-ingress.yml
 
-      - name: Clean up existing Kibana release (if any)
-        run: |
-          helm uninstall kibana --namespace=logging || true
-          kubectl delete job pre-install-kibana-kibana -n logging --ignore-not-found
-          kubectl delete serviceaccount pre-install-kibana-kibana -n logging --ignore-not-found
-          kubectl delete configmap kibana-kibana-helm-scripts -n logging --ignore-not-found
-          kubectl delete role pre-install-kibana-kibana -n logging --ignore-not-found
-          kubectl delete rolebinding pre-install-kibana-kibana -n logging --ignore-not-found
-
-
       - name: Deploy ELK Stack
         env:
           ELASTIC_USERNAME: ${{ secrets.ELASTIC_USERNAME }}
@@ -110,8 +100,24 @@ jobs:
             --set auth.username=$Elastic_USERNAME \
             --set auth.password=$ELASTIC_PASSWORD
 
+          # Create secret for Kibana pre-install hook
+          kubectl create secret generic elasticsearch-master-credentials \
+            --from-literal=username=$ELASTIC_USERNAME \
+            --from-literal=password=$ELASTIC_PASSWORD \
+            -n logging \
+            --dry-run=client -o yaml | kubectl apply -f -
+
+          # Deploy Kibana
+          helm upgrade --install kibana elastic/kibana \
+            --namespace logging \
+            --timeout 10m \
+            --wait
+
           # Deploy Filebeat
           helm upgrade --install filebeat elastic/filebeat \
             --namespace logging
 
 
+      - name: Expose Kibana via Ingress
+        run: |
+          kubectl apply -f ./monitoring+logging/kibana-ingress.yml
