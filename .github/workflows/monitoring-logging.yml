@@ -99,7 +99,7 @@ jobs:
           helm repo add elastic https://helm.elastic.co
           helm repo update
           helm upgrade --install elasticsearch elastic/elasticsearch --namespace logging --create-namespace
-          helm upgrade --install kibana elastic/kibana --namespace logging
+          helm upgrade --install kibana elastic/kibana --namespace logging --timeout 10m --wait
           helm upgrade --install filebeat elastic/filebeat --namespace logging
 
       - name: Expose Kibana via Ingress
