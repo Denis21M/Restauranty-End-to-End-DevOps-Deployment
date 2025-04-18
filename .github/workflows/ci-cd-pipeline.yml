@@ -186,15 +186,20 @@ jobs:
           # Install Helm
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
       
-      - name: Install Nginx Ingress Controller
+      - name: Get Terraform output
+        id: tf
         run: |
-          # Install ingress-nginx
+          echo "INGRESS_IP=$(terraform output -raw ingress_public_ip)" >> $GITHUB_ENV
+
+      - name: Install ingress-nginx
+        run: |
           helm upgrade --install ingress-nginx ingress-nginx \
             --repo https://kubernetes.github.io/ingress-nginx \
             --namespace ingress-nginx --create-namespace \
-            --set controller.service.loadBalancerIP=${azurerm_public_ip.ingress_ip.ip_address} \
-            --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-resource-group"=${azurerm_resource_group.aks_rg.name} \
-            --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-pip-name"=ingress-public-ip
+            --set controller.service.loadBalancerIP=$INGRESS_IP \
+            --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-pip-name"=ingress-public-ip \
+            --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-resource-group"=your-resource-group-name \
+
 
       - name: Create Kubernetes Secrets
         run: |
