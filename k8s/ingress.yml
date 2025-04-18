@@ -11,28 +11,28 @@ spec:
     - http:
         paths:
           - path: /api/auth(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: auth-service
                 port:
                   number: 3001
           - path: /api/discounts(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: discounts-service
                 port:
                   number: 3002
           - path: /api/items(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: items-service
                 port:
                   number: 3003
           - path: /(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: client-service
