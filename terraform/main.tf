@@ -39,7 +39,3 @@ resource "azurerm_public_ip" "ingress_ip" {
   sku                 = "Standard"
   domain_name_label   = "bud-restauranty-app"
 }
-
- output "ingress_public_ip" {
- value = azurerm_public_ip.ingress_ip.ip_address
-}
