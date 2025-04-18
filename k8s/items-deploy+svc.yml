@@ -42,17 +42,17 @@ spec:
           valueFrom:
             secretKeyRef:
               name: app-secrets
-              key: cloud_name
+              key: CLOUD_NAME
         - name: CLOUD_API_KEY
           valueFrom:
             secretKeyRef:
               name: app-secrets
-              key: cloud_api_key
+              key: CLOUD_API_KEY
         - name: CLOUD_API_SECRET
           valueFrom:
             secretKeyRef:
               name: app-secrets
-              key: cloud_api_secret
+              key: CLOUD_API_SECRET
 
          
 ---
