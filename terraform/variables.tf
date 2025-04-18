@@ -7,7 +7,7 @@ variable "resource_group_name" {
 variable "location" {
   type        = string
   description = "Azure region"
-  default     = "SouthIndia"
+  default     = "westeurope"
 }
 
 variable "aks_cluster_name" {
@@ -19,7 +19,7 @@ variable "aks_cluster_name" {
 variable "agent_count" {
   type        = number
   description = "Number of nodes in the node pool"
-  default     = 5
+  default     = 4
 }
 
 variable "subscription_id" {
