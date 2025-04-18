@@ -37,11 +37,11 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/auth:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/auth:latest
           build-args: |
-            MONGODB_URI=${MONGODB_URI_ITEMS}
-            cloud_name=${cloud_name}
-            cloud_api_key=${cloud_api_key}
-            cloud_api_secret=${cloud_api_secret}
-            SECRET=${SECRET}
+            MONGODB_URI=${{ secrets.MONGODB_URI_AUTH }}
+            SECRET=${{ secrets.SECRET }}
+            CLOUD_NAME=${{ secrets.cloud_name }}
+            CLOUD_API_KEY=${{ secrets.cloud_api_key }}
+            CLOUD_API_SECRET=${{ secrets.cloud_api_secret }}
 
       - name: Build and push discounts service
         uses: docker/build-push-action@v6
@@ -52,11 +52,11 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/discounts:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/discounts:latest
           build-args: |
-            MONGODB_URI=${MONGODB_URI_ITEMS}
-            cloud_name=${cloud_name}
-            cloud_api_key=${cloud_api_key}
-            cloud_api_secret=${cloud_api_secret}
-            SECRET=${SECRET}
+            MONGODB_URI=${{ secrets.MONGODB_URI_DISCOUNTS }}
+            SECRET=${{ secrets.SECRET }}
+            CLOUD_NAME=${{ secrets.cloud_name }}
+            CLOUD_API_KEY=${{ secrets.cloud_api_key }}
+            CLOUD_API_SECRET=${{ secrets.cloud_api_secret }}
 
       - name: Build and push items service
         uses: docker/build-push-action@v6
@@ -67,11 +67,11 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/items:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/items:latest
           build-args: |
-            MONGODB_URI=${MONGODB_URI_ITEMS}
-            cloud_name=${cloud_name}
-            cloud_api_key=${cloud_api_key}
-            cloud_api_secret=${cloud_api_secret}
-            SECRET=${SECRET}
+            MONGODB_URI=${{ secrets.MONGODB_URI_ITEMS }}
+            SECRET=${{ secrets.SECRET }}
+            CLOUD_NAME=${{ secrets.cloud_name }}
+            CLOUD_API_KEY=${{ secrets.cloud_api_key }}
+            CLOUD_API_SECRET=${{ secrets.cloud_api_secret }}
 
       - name: Build and push client
         uses: docker/build-push-action@v6
@@ -203,9 +203,9 @@ jobs:
             --from-literal=MONGODB_URI_DISCOUNTS=${{ secrets.MONGODB_URI_DISCOUNTS }} \
             --from-literal=MONGODB_URI_ITEMS=${{ secrets.MONGODB_URI_ITEMS }} \
             --from-literal=MONGODB_URI=${{ secrets.MONGODB_URI }} \
-            --from-literal=cloud_name=${{ secrets.cloud_name }} \
-            --from-literal=cloud_api_key=${{ secrets.cloud_api_key }} \
-            --from-literal=cloud_api_secret=${{ secrets.cloud_api_secret }} \
+            --from-literal=CLOUD_NAME=${{ secrets.CLOUD_NAME }} \
+            --from-literal=CLOUD_API_KEY=${{ secrets.CLOUD_API_KEY }} \
+            --from-literal=CLOUD_API_SECRET=${{ secrets.CLOUD_API_SECRET }} \
             --from-literal=SECRET=${{ secrets.SECRET }} \
             --from-literal=REACT_APP_SERVER_URL=${{ secrets.REACT_APP_SERVER_URL }} \
             --dry-run=client -o yaml | kubectl apply -f -    

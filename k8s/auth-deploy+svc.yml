@@ -37,23 +37,6 @@ spec:
               name: app-secrets
               key: SECRET
         
-        # Cloudinary Configuration
-        - name: cloud_name
-          valueFrom:
-            secretKeyRef:
-              name: app-secrets
-              key: cloud_name
-        - name: cloud_api_key
-          valueFrom:
-            secretKeyRef:
-              name: app-secrets
-              key: cloud_api_key
-        - name: cloud_api_secret
-          valueFrom:
-            secretKeyRef:
-              name: app-secrets
-              key: cloud_api_secret
-        
 ---
 apiVersion: v1
 kind: Service

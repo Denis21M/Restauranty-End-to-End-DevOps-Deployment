@@ -8,23 +8,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Create empty .env file (will be populated later)
-RUN touch .env
-
-# Define build-time variables
-ARG MONGODB_URI
-ARG cloud_name
-ARG cloud_api_key
-ARG cloud_api_secret
-ARG SECRET
-
-# Use them as environment variables at runtime
-ENV MONGODB_URI=${MONGODB_URI_DISCOUNTS}
-ENV cloud_name=${cloud_name}
-ENV cloud_api_key=${cloud_api_key}
-ENV cloud_api_secret=${cloud_api_secret}
-ENV SECRET=${SECRET}
-
 # Copy the rest of the app
 COPY . .
 
