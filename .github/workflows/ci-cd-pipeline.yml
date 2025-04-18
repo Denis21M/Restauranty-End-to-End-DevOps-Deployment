@@ -81,6 +81,8 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/client:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/client:latest
+          build-args: |
+            REACT_APP_SERVER_URL="http://135.13.11.18:80/api"
 
      
       - name: Azure Login
