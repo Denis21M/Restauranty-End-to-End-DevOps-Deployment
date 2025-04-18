@@ -13,16 +13,16 @@ RUN touch .env
 
 # Define build-time variables
 ARG MONGODB_URI
-ARG CLOUD_NAME
-ARG CLOUD_API_KEY
-ARG CLOUD_API_SECRET
+ARG cloud_name
+ARG cloud_api_key
+ARG cloud_api_secret
 ARG SECRET
 
 # Use them as environment variables at runtime
 ENV MONGODB_URI=${MONGODB_URI_ITEMS}
-ENV CLOUD_NAME=${CLOUD_NAME}
-ENV CLOUD_API_KEY=${CLOUD_API_KEY}
-ENV CLOUD_API_SECRET=${CLOUD_API_SECRET}
+ENV cloud_name=${cloud_name}
+ENV cloud_api_key=${cloud_api_key}
+ENV cloud_api_secret=${cloud_api_secret}
 ENV SECRET=${SECRET}
 
 # Copy the rest of the app

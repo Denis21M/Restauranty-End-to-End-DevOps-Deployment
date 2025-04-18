@@ -38,21 +38,21 @@ spec:
               key: SECRET
         
         # Cloudinary Configuration
-        - name: CLOUD_NAME
+        - name: cloud_name
           valueFrom:
             secretKeyRef:
               name: app-secrets
-              key: CLOUD_NAME
-        - name: CLOUD_API_KEY
+              key: cloud_name
+        - name: cloud_api_key
           valueFrom:
             secretKeyRef:
               name: app-secrets
-              key: CLOUD_API_KEY
-        - name: CLOUD_API_SECRET
+              key: cloud_api_key
+        - name: cloud_api_secret
           valueFrom:
             secretKeyRef:
               name: app-secrets
-              key: CLOUD_API_SECRET
+              key: cloud_api_secret
 
          
 ---
