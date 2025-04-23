@@ -1,6 +1,6 @@
 This project is a full-stack microservices-based web application deployed on Azure Kubernetes Service (AKS) using a GitHub Actions CI/CD pipeline and Terraform infrastructure as code.
 
-![Architecture](Reastauranty-app/project4.jpeg)
+![Architecture](./architecture/project4.jpeg)
 
 - 📦 Architecture Overview
 The application consists of:
