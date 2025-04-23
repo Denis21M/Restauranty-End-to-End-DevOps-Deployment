@@ -33,17 +33,6 @@ Prometheus + Grafana (monitoring namespace): Metrics scraping and visualization
 
 ELK Stack (Elasticsearch, Logstash, Kibana) (logging namespace): Centralized log collection and analysis
 
-- 🗂️ Project Structure
-.
-├── backend/
-│   ├── auth/        # Auth microservice (port 3001)
-│   ├── discounts/   # Discounts microservice (port 3002)
-│   └── items/       # Items microservice (port 3003)
-├── client/          # React frontend (port 3000)
-├── k8s/             # Kubernetes manifests
-├── Terraform-files  # Infrastructure provisioning  
-└── .github/workflows # CI/CD pipeline definition
-
 - 🚀 Deployment Flow
 Infrastructure Provisioning:
 
