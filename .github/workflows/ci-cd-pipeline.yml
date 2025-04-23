@@ -39,9 +39,6 @@ jobs:
           build-args: |
             MONGODB_URI=${{ secrets.MONGODB_URI_AUTH }}
             SECRET=${{ secrets.SECRET }}
-            CLOUD_NAME=${{ secrets.cloud_name }}
-            CLOUD_API_KEY=${{ secrets.cloud_api_key }}
-            CLOUD_API_SECRET=${{ secrets.cloud_api_secret }}
 
       - name: Build and push discounts service
         uses: docker/build-push-action@v6
@@ -54,9 +51,6 @@ jobs:
           build-args: |
             MONGODB_URI=${{ secrets.MONGODB_URI_DISCOUNTS }}
             SECRET=${{ secrets.SECRET }}
-            CLOUD_NAME=${{ secrets.cloud_name }}
-            CLOUD_API_KEY=${{ secrets.cloud_api_key }}
-            CLOUD_API_SECRET=${{ secrets.cloud_api_secret }}
 
       - name: Build and push items service
         uses: docker/build-push-action@v6
