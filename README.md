@@ -86,3 +86,37 @@ CLOUD_API_SECRET=...
 
 - Frontend uses:
 REACT_APP_API_URL=http://<load-balancer-ip>
+
+## Monitoring and logging
+
+- it is best not to automate this part in the pipeline, it is not a process you want to run each time the pipeline runs. One time set up is enough. Therefore, manually apply manifests for the deployments and services.
+
+- clone kube-prometheus repo to get the prometheus stack:
+1. Set up custom manifest monitor+log folder containing following sub folders
+    setup (namespace.yml and rbac.yml specific for AKS)
+    monitoring (prometheus-config.yml and grafana,yml)
+    logging (elasticsearch.yml, kibana.yml and logstash.yml)
+2. Then RUN:
+    kubectl apply --server-side -f ./monitor+log/setup
+    kubectl apply -f ./monitor+log/monitoring
+    kubectl apply -f ./monitor+log/logging
+3.  Prometheus collects and exposes metrics.
+    URL (via Ingress): http://<Ingress-IP or host>/
+    Grafana visualizes Prometheus data.
+
+    URL (via Ingress or LoadBalancer): http://<Ingress-IP or host>
+
+    Login Default:
+    User: admin
+    Pass: admin (you should change this)
+
+    Add Prometheus as a data source: URL: http://prometheus:9090 (internal Kubernetes service name)
+    Create Dashboards: Use templates or custom queries.
+4. Elastcisearch access is internal: 
+    Kibana Web interface to visualize logs.
+
+    URL (via Ingress or LoadBalancer): http://<Ingress-IP or host>
+
+ 
+
+
