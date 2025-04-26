@@ -1,91 +1,90 @@
+## Restauranty-End-to-End-DevOps-Deployment
 This project is a full-stack microservices-based web application deployed on Azure Kubernetes Service (AKS) using a GitHub Actions CI/CD pipeline and Terraform infrastructure as code.
+# 📦 Architecture Overview
 
 ![Architecture](./architecture/project4.jpeg)
 
-- 📦 Architecture Overview
-The application consists of:
+# The application consists of:
 
-Three Node.js backend microservices:
+- Three Node.js backend microservices:
 
-Auth: User authentication & JWT generation
+    - Auth: User authentication & JWT generation
 
-Discounts: Campaign and coupon management
+    - Discounts: Campaign and coupon management
 
-Items: Product catalog and order handling
+    - Items: Product catalog and order handling
 
-- React frontend:
+# React frontend:
 
-Acts as a single-page application (SPA) interacting with backend microservices via /api/* routes
+- Acts as a single-page application (SPA) interacting with backend microservices via /api/* routes
 
-- MongoDB:
+# MongoDB:
 
-Centralized NoSQL database for all microservices, exposed via port 27017
+- Centralized NoSQL database for all microservices, exposed via port 27017
 
-- Ingress Controller:
+# Ingress Controller:
 
-Routes traffic from a single public IP/domain to appropriate services
+- Routes traffic from a single public IP/domain to appropriate services
 
-NGINX Ingress on port 80
+- NGINX Ingress on port 80
 
-- Monitoring & Logging:
+# Monitoring & Logging:
 
-Prometheus + Grafana (monitoring namespace): Metrics scraping and visualization
+- Prometheus + Grafana (monitoring namespace): Metrics scraping and visualization
 
-ELK Stack (Elasticsearch, Logstash, Kibana) (logging namespace): Centralized log collection and analysis
+- ELK Stack (Elasticsearch, Logstash, Kibana) (logging namespace): Centralized log collection and analysis
 
-- 🚀 Deployment Flow
-Infrastructure Provisioning:
+# 🚀 Deployment Flow
+- Infrastructure Provisioning: Terraform provisions Azure Resource Group and AKS cluster.
 
-Terraform provisions Azure Resource Group and AKS cluster.
+# CI/CD Pipeline:
 
-- CI/CD Pipeline:
+- GitHub Actions builds Docker images and pushes them to a container registry.
 
-GitHub Actions builds Docker images and pushes them to a container registry.
+- Kubernetes manifests are applied to deploy services.
 
-Kubernetes manifests are applied to deploy services.
+# Ingress Routing:
 
-- Ingress Routing:
+- All traffic enters through the NGINX Ingress Controller.
 
-All traffic enters through the NGINX Ingress Controller.
+# Routes are defined:
 
-- Routes are defined:
+- /api/auth/ → Auth Service
 
-/api/auth/ → Auth Service
+- /api/discounts/ → Discounts Service
 
-/api/discounts/ → Discounts Service
+- /api/items/ → Items Service
 
-/api/items/ → Items Service
+- / → React Frontend
 
-/ → React Frontend
+# Monitoring & Logging:
 
-- Monitoring & Logging:
+- Prometheus scrapes metrics from pods.
 
-Prometheus scrapes metrics from pods.
+- Grafana visualizes performance metrics.
 
-Grafana visualizes performance metrics.
+- ELK stack collects logs from all services.
 
-ELK stack collects logs from all services.
+# 🔐 Security
+- Ingress is the only public entrypoint.
 
-- 🔐 Security
-Ingress is the only public entrypoint.
+- JWT authentication handled by the Auth service; other services validate tokens.
 
-JWT authentication handled by the Auth service; other services validate tokens.
+- Environment variables and secrets are stored securely in Kubernetes Secrets or .env (not committed).
 
-Environment variables and secrets are stored securely in Kubernetes Secrets or .env (not committed).
+- Network Policies restrict communication between pods where needed.
 
-Network Policies restrict communication between pods where needed.
+# 🔧 Environment Variables
+- Each backend service requires:
+- PORT=300x
+- SECRET=YourJWTSecret
+- MONGODB_URI=mongodb://<mongodb-host>:27017/<db>
+- CLOUD_NAME=...
+- CLOUD_API_KEY=...
+- CLOUD_API_SECRET=...
 
-- 🔧 Environment Variables
-Each backend service requires:
-PORT=300x
-SECRET=YourJWTSecret
-MONGODB_URI=mongodb://<mongodb-host>:27017/<db>
-CLOUD_NAME=...
-CLOUD_API_KEY=...
-CLOUD_API_SECRET=...
-
-- Frontend uses:
-REACT_APP_API_URL=http://<load-balancer-ip>
+# Frontend uses:
+- REACT_APP_API_URL=http://<load-balancer-ip>
 
 ## Monitoring and logging
 
@@ -97,25 +96,22 @@ REACT_APP_API_URL=http://<load-balancer-ip>
     monitoring (prometheus-config.yml and grafana,yml)
     logging (elasticsearch.yml, kibana.yml and logstash.yml)
 2. Then RUN:
-    kubectl apply --server-side -f ./monitor+log/setup
-    kubectl apply -f ./monitor+log/monitoring
-    kubectl apply -f ./monitor+log/logging
+    - kubectl apply --server-side -f ./monitor+log/setup
+    - kubectl apply -f ./monitor+log/monitoring
+    - kubectl apply -f ./monitor+log/logging
 3.  Prometheus collects and exposes metrics.
-    URL (via Ingress): http://<Ingress-IP or host>/
-    Grafana visualizes Prometheus data.
+    - URL (via Ingress): http://<Ingress-IP or host>/
+4. Grafana visualizes Prometheus data.
+    - URL (via Ingress or LoadBalancer): http://<Ingress-IP or host>
+    - Login Default:
+    - User: admin
+    - Pass: admin (you should change this)
 
-    URL (via Ingress or LoadBalancer): http://<Ingress-IP or host>
-
-    Login Default:
-    User: admin
-    Pass: admin (you should change this)
-
-    Add Prometheus as a data source: URL: http://prometheus:9090 (internal Kubernetes service name)
-    Create Dashboards: Use templates or custom queries.
-4. Elastcisearch access is internal: 
-    Kibana Web interface to visualize logs.
-
-    URL (via Ingress or LoadBalancer): http://<Ingress-IP or host>
+    - Add Prometheus as a data source: URL: http://prometheus:9090 (internal Kubernetes service name)
+    - Create Dashboards: Use templates or custom queries.
+5. Elastcisearch access is internal: 
+    - Kibana Web interface to visualize logs.
+    - URL (via Ingress or LoadBalancer): http://<Ingress-IP or host>
 
  
 
