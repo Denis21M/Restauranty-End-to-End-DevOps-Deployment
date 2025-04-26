@@ -78,13 +78,13 @@ This project is a full-stack microservices-based web application deployed on Azu
 - Each backend service requires:
 - PORT=300x
 - SECRET=YourJWTSecret
-- MONGODB_URI=mongodb://<mongodb-host>:27017/<db>
+- MONGODB_URI=mongodb://mongodb-host:27017/db-each backend microservice
 - CLOUD_NAME=...
 - CLOUD_API_KEY=...
 - CLOUD_API_SECRET=...
 
 # Frontend uses:
-- REACT_APP_API_URL=http://<load-balancer-ip>
+- REACT_APP_API_URL=http://load-balancer-ip/
 
 ## Monitoring and logging
 
@@ -100,9 +100,9 @@ This project is a full-stack microservices-based web application deployed on Azu
     - kubectl apply -f ./monitor+log/monitoring
     - kubectl apply -f ./monitor+log/logging
 3.  Prometheus collects and exposes metrics.
-    - URL (via Ingress): http://<Ingress-IP or host>/
+    - URL (via Ingress): http://Ingress-IP/
 4. Grafana visualizes Prometheus data.
-    - URL (via Ingress or LoadBalancer): http://<Ingress-IP or host>
+    - URL (via Ingress or LoadBalancer): http://ingress-IP/
     - Login Default:
     - User: admin
     - Pass: admin (you should change this)
@@ -111,7 +111,7 @@ This project is a full-stack microservices-based web application deployed on Azu
     - Create Dashboards: Use templates or custom queries.
 5. Elastcisearch access is internal: 
     - Kibana Web interface to visualize logs.
-    - URL (via Ingress or LoadBalancer): http://<Ingress-IP or host>
+    - URL (via Ingress or LoadBalancer): http://Ingress-IP/
 
  
 
