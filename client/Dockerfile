@@ -15,7 +15,7 @@ RUN touch .env
 ARG REACT_APP_SERVER_URL
 
 # Use them as environment variables at runtime
-ENV REACT_APP_SERVER_URL="http://74.178.201.104:80/api"
+ENV REACT_APP_SERVER_URL=$REACT_APP_SERVER_URL
 
 # Copy the rest of the app and build it
 COPY . .

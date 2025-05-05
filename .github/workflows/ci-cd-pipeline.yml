@@ -75,7 +75,8 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/client:${{ env.IMAGE_TAG }}
             ${{ secrets.DOCKER_USERNAME }}/client:latest
-
+          build-args: |
+            REACT_APP_SERVER_URL=${{ secrets.REACT_APP_SERVER_URL }}
      
       - name: Azure Login
         uses: azure/login@v2
