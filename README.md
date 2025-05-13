@@ -57,14 +57,6 @@ This project is a full-stack microservices-based web application deployed on Azu
 
 - / → React Frontend
 
-# Monitoring & Logging:
-
-- Prometheus scrapes metrics from pods.
-
-- Grafana visualizes performance metrics.
-
-- ELK stack collects logs from all services.
-
 # 🔐 Security
 - Ingress is the only public entrypoint.
 
@@ -90,6 +82,12 @@ This project is a full-stack microservices-based web application deployed on Azu
 
 - it is best not to automate this part in the pipeline, it is not a process you want to run each time the pipeline runs. One time set up is enough. Therefore, manually apply manifests for the deployments and services.
 
+- Prometheus scrapes metrics from pods.
+
+- Grafana visualizes performance metrics.
+
+- ELK stack collects logs from all services.
+
 - clone kube-prometheus repo to get the prometheus stack:
 1. Set up custom manifest monitor+log folder containing following sub folders
     setup (namespace.yml and rbac.yml specific for AKS)
@@ -104,8 +102,8 @@ This project is a full-stack microservices-based web application deployed on Azu
 4. Grafana visualizes Prometheus data.
     - URL (via Ingress or LoadBalancer): http://ingress-IP/
     - Login Default:
-    - User: admin
-    - Pass: admin (you should change this)
+     - User: admin
+     - Pass: admin (you should change this)
 
     - Add Prometheus as a data source: URL: http://prometheus:9090 (internal Kubernetes service name)
     - Create Dashboards: Use templates or custom queries.
