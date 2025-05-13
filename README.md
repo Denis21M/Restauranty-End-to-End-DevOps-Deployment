@@ -102,8 +102,8 @@ This project is a full-stack microservices-based web application deployed on Azu
 4. Grafana visualizes Prometheus data.
     - URL (via Ingress or LoadBalancer): http://ingress-IP/
     - Login Default:
-     - User: admin
-     - Pass: admin (you should change this)
+        a. User: admin
+        b. Pass: admin (you should change this)
 
     - Add Prometheus as a data source: URL: http://prometheus:9090 (internal Kubernetes service name)
     - Create Dashboards: Use templates or custom queries.
