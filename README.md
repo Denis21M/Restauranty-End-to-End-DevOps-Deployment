@@ -14,48 +14,42 @@ This project is a full-stack microservices-based web application deployed on Azu
 
     - Items: Product catalog and order handling
 
-# React frontend:
+    - React frontend:
 
-- Acts as a single-page application (SPA) interacting with backend microservices via /api/* routes
+        - Acts as a single-page application (SPA) interacting with backend microservices via /api/* routes
 
-# MongoDB:
+    - MongoDB:
 
-- Centralized NoSQL database for all microservices, exposed via port 27017
+        - Centralized NoSQL database for all microservices, exposed via port 27017
 
-# Ingress Controller:
+    - Ingress Controller:
 
-- Routes traffic from a single public IP/domain to appropriate services
+        - Routes traffic from a single public IP/domain to appropriate services
 
-- NGINX Ingress on port 80
-
-# Monitoring & Logging:
-
-- Prometheus + Grafana (monitoring namespace): Metrics scraping and visualization
-
-- ELK Stack (Elasticsearch, Logstash, Kibana) (logging namespace): Centralized log collection and analysis
+    - NGINX Ingress on port 80
 
 # 🚀 Deployment Flow
 - Infrastructure Provisioning: Terraform provisions Azure Resource Group and AKS cluster.
 
-# CI/CD Pipeline:
+- CI/CD Pipeline:
 
 - GitHub Actions builds Docker images and pushes them to a container registry.
 
 - Kubernetes manifests are applied to deploy services.
 
-# Ingress Routing:
+- Ingress Routing:
 
-- All traffic enters through the NGINX Ingress Controller.
+    - All traffic enters through the NGINX Ingress Controller.
 
-# Routes are defined:
+- Routes are defined:
 
-- /api/auth/ → Auth Service
+    - /api/auth/ → Auth Service
 
-- /api/discounts/ → Discounts Service
+    - /api/discounts/ → Discounts Service
 
-- /api/items/ → Items Service
+    - /api/items/ → Items Service
 
-- / → React Frontend
+    - / → React Frontend
 
 # 🔐 Security
 - Ingress is the only public entrypoint.
@@ -74,11 +68,10 @@ This project is a full-stack microservices-based web application deployed on Azu
 - CLOUD_NAME=...
 - CLOUD_API_KEY=...
 - CLOUD_API_SECRET=...
+- Frontend uses:
+    - REACT_APP_API_URL=http://load-balancer-ip/
 
-# Frontend uses:
-- REACT_APP_API_URL=http://load-balancer-ip/
-
-## Monitoring and logging
+# Monitoring and logging
 
 - it is best not to automate this part in the pipeline, it is not a process you want to run each time the pipeline runs. One time set up is enough. Therefore, manually apply manifests for the deployments and services.
 
@@ -86,30 +79,30 @@ This project is a full-stack microservices-based web application deployed on Azu
 
 - Grafana visualizes performance metrics.
 
-- ELK stack collects logs from all services.
+- ELK stack collects logs from all services: Centralized log collection and analysis
 
-- clone kube-prometheus repo to get the prometheus stack:
-1. Set up custom manifest monitor+log folder containing following sub folders
-    setup (namespace.yml and rbac.yml specific for AKS)
-    monitoring (prometheus-config.yml and grafana,yml)
-    logging (elasticsearch.yml, kibana.yml and logstash.yml)
-2. Then RUN:
-    - kubectl apply --server-side -f ./monitor+log/setup
-    - kubectl apply -f ./monitor+log/monitoring
-    - kubectl apply -f ./monitor+log/logging
-3.  Prometheus collects and exposes metrics.
-    - URL (via Ingress): http://Ingress-IP/
-4. Grafana visualizes Prometheus data.
-    - URL (via Ingress or LoadBalancer): http://ingress-IP/
-    - Login Default:
-        a. User: admin
-        b. Pass: admin (you should change this)
+    - clone kube-prometheus repo to get the prometheus stack:
+    1. Set up custom manifest monitor+log folder containing following sub folders
+        setup (namespace.yml and rbac.yml specific for AKS)
+        monitoring (prometheus-config.yml and grafana,yml)
+        logging (elasticsearch.yml, kibana.yml and logstash.yml)
+    2. Then RUN:
+        - kubectl apply --server-side -f ./monitor+log/setup
+        - kubectl apply -f ./monitor+log/monitoring
+        - kubectl apply -f ./monitor+log/logging
+    3.  Prometheus collects and exposes metrics.
+        - URL (via Ingress): http://Ingress-IP/
+    4. Grafana visualizes Prometheus data.
+        - URL (via Ingress or LoadBalancer): http://ingress-IP/
+        - Login Default:
+            - a. User: admin
+            - b. Pass: admin (you should change this)
 
-    - Add Prometheus as a data source: URL: http://prometheus:9090 (internal Kubernetes service name)
-    - Create Dashboards: Use templates or custom queries.
-5. Elastcisearch access is internal: 
-    - Kibana Web interface to visualize logs.
-    - URL (via Ingress or LoadBalancer): http://Ingress-IP/
+        - Add Prometheus as a data source: URL: http://prometheus:9090 (internal Kubernetes service name)
+        - Create Dashboards: Use templates or custom queries.
+    5. Elastcisearch access is internal: 
+        - Kibana Web interface to visualize logs.
+        - URL (via Ingress or LoadBalancer): http://Ingress-IP/
 
  
 
