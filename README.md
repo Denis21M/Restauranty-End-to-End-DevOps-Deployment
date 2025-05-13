@@ -81,7 +81,7 @@ This project is a full-stack microservices-based web application deployed on Azu
 
 - ELK stack collects logs from all services: Centralized log collection and analysis
 
-    - clone kube-prometheus repo to get the prometheus stack:
+    - clone kube-prometheus repo to get the prometheus stack, then the follow steps:
     1. Set up custom manifest monitor+log folder containing following sub folders
         setup (namespace.yml and rbac.yml specific for AKS)
         monitoring (prometheus-config.yml and grafana,yml)
